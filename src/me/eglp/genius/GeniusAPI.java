@@ -1,10 +1,10 @@
-package me.eglp.genius4graphite;
+package me.eglp.genius;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import me.eglp.genius4graphite.entity.GeniusSearchHit;
-import me.eglp.genius4graphite.util.GeniusEndpoint;
+import me.eglp.genius.entity.GeniusSearchHit;
+import me.eglp.genius.util.GeniusEndpoint;
 import me.mrletsplay.mrcore.http.HttpGet;
 import me.mrletsplay.mrcore.http.HttpRequest;
 import me.mrletsplay.mrcore.json.JSONObject;

@@ -1,4 +1,4 @@
-package me.eglp.genius4graphite.entity;
+package me.eglp.genius.entity;
 
 import me.mrletsplay.mrcore.json.converter.JSONConstructor;
 import me.mrletsplay.mrcore.json.converter.JSONConvertible;

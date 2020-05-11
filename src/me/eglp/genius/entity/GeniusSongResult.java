@@ -1,4 +1,4 @@
-package me.eglp.genius4graphite.entity;
+package me.eglp.genius.entity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

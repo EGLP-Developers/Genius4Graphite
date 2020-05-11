@@ -1,6 +1,6 @@
-package me.eglp.genius4graphite.util;
+package me.eglp.genius.util;
 
-import me.eglp.genius4graphite.GeniusAPI;
+import me.eglp.genius.GeniusAPI;
 
 public enum GeniusEndpoint {
 	

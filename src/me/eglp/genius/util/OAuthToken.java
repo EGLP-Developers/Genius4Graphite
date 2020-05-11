@@ -1,4 +1,4 @@
-package me.eglp.genius4graphite.util;
+package me.eglp.genius.util;
 
 import me.mrletsplay.mrcore.json.JSONObject;
 
