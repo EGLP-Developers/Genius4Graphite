@@ -7,49 +7,49 @@ import me.mrletsplay.mrcore.json.converter.JSONValue;
 public class GeniusSongStats implements JSONConvertible {
 	
 	@JSONValue("accepted_annotations")
-	private long acceptedAnnotations;
+	private Long acceptedAnnotations;
 	
 	@JSONValue("contributors")
-	private long contributors;
+	private Long contributors;
 	
 	@JSONValue("iq_earners")
-	private long iqEarners;
+	private Long iqEarners;
 	
 	@JSONValue("transcribers")
-	private long transcribers;
+	private Long transcribers;
 	
 	@JSONValue("unreviewed_annotations")
-	private long unreviewedAnnotations;
+	private Long unreviewedAnnotations;
 	
 	@JSONValue("verified_annotations")
-	private long verifiedAnnotations;
+	private Long verifiedAnnotations;
 	
 	@JSONValue("hot")
 	private boolean hot;
 	
 	@JSONValue("pageviews")
-	private long pageviews;
+	private Long pageviews;
 	
 	@JSONConstructor
 	private GeniusSongStats() {}
 
-	public long getAcceptedAnnotations() {
+	public Long getAcceptedAnnotations() {
 		return acceptedAnnotations;
 	}
 
-	public long getContributors() {
+	public Long getContributors() {
 		return contributors;
 	}
 
-	public long getIqEarners() {
+	public Long getIqEarners() {
 		return iqEarners;
 	}
 
-	public long getTranscribers() {
+	public Long getTranscribers() {
 		return transcribers;
 	}
 
-	public long getUnreviewedAnnotations() {
+	public Long getUnreviewedAnnotations() {
 		return unreviewedAnnotations;
 	}
 
