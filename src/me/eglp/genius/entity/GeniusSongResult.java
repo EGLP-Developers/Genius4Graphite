@@ -1,5 +1,8 @@
 package me.eglp.genius.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,6 +10,8 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import me.eglp.genius.entity.lyrics.GeniusLyricsSection;
+import me.eglp.genius.entity.lyrics.GeniusSongLyrics;
 import me.mrletsplay.mrcore.http.HttpRequest;
 import me.mrletsplay.mrcore.http.HttpResult;
 import me.mrletsplay.mrcore.json.converter.JSONConstructor;
@@ -16,7 +21,7 @@ import me.mrletsplay.mrcore.json.converter.JSONValue;
 public class GeniusSongResult implements JSONConvertible {
 	
 	@JSONValue("annotation_count")
-	private long annotationCount;
+	private Long annotationCount;
 	
 	@JSONValue("full_title")
 	private String fullTitle;
@@ -37,7 +42,7 @@ public class GeniusSongResult implements JSONConvertible {
 	private String lyricsState;
 	
 	@JSONValue("pyongs_count")
-	private long pyongsCount;
+	private Long pyongsCount;
 	
 	@JSONValue("song_art_image_thumbnail_url")
 	private String songArtImageThumbnailURL;
@@ -63,7 +68,7 @@ public class GeniusSongResult implements JSONConvertible {
 	@JSONConstructor
 	private GeniusSongResult() {}
 
-	public long getAnnotationCount() {
+	public Long getAnnotationCount() {
 		return annotationCount;
 	}
 
@@ -91,7 +96,7 @@ public class GeniusSongResult implements JSONConvertible {
 		return lyricsState;
 	}
 
-	public long getPyongsCount() {
+	public Long getPyongsCount() {
 		return pyongsCount;
 	}
 
@@ -123,7 +128,7 @@ public class GeniusSongResult implements JSONConvertible {
 		return primaryArtist;
 	}
 	
-	public String retrieveLyrics() {
+	public GeniusSongLyrics retrieveLyrics() {
 		HttpResult r = HttpRequest.createGet(url)
 				.setHeaderParameter("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
 				.execute();
@@ -140,17 +145,33 @@ public class GeniusSongResult implements JSONConvertible {
 			lyricsElement = d.getElementsByClass("lyrics").get(0).child(0);
 		}
 		
+		List<GeniusLyricsSection> sc = new ArrayList<>();
+		String title = null;
 		StringBuilder lyrics = new StringBuilder();
-		for(Node c : lyricsElement.childNodes()) {
-			append(lyrics, c);
+		
+		append(lyrics, lyricsElement);
+		
+		StringBuilder sec = new StringBuilder();
+		for(String line : lyrics.toString().split("\n", -1)) {
+			if(line.startsWith("[")) {
+				if(title != null) sc.add(new GeniusLyricsSection(title, sec.toString().trim()));
+				title = line.trim();
+				sec = new StringBuilder();
+			}else {
+				sec.append(line).append('\n');
+			}
 		}
 		
-		return lyrics.toString().trim();
+		if(title != null || sec.length() > 0) sc.add(new GeniusLyricsSection(title == null ? "Lyrics" : title, sec.toString().trim()));
+		
+		return new GeniusSongLyrics(sc);
 	}
 	
 	private static void append(StringBuilder builder, Node n) {
 		if(n instanceof TextNode) {
-			builder.append(((TextNode) n).text().trim());
+			builder.append(((TextNode) n).text()
+					.replaceAll("^( |\\t)++", "")
+					.replaceAll("^( |\\t)++$", ""));
 		}
 		
 		if(n instanceof Element) {
