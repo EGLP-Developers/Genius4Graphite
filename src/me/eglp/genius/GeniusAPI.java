@@ -33,7 +33,7 @@ public class GeniusAPI {
 	}
 	
 	public GeniusSong getSong(long id) {
-		return JSONConverter.decodeObject(makeGetRequest(GeniusEndpoint.SONGS.subPath(String.valueOf(id))), GeniusSong.class);
+		return JSONConverter.decodeObject(makeGetRequest(GeniusEndpoint.SONGS.subPath(String.valueOf(id)), "text_format", "plain").getJSONObject("response").getJSONObject("song"), GeniusSong.class);
 	}
 	
 	public synchronized JSONObject makeGetRequest(GeniusEndpoint endpoint, String... queryParams) {

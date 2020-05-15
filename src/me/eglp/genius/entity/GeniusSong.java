@@ -10,7 +10,7 @@ import me.mrletsplay.mrcore.json.converter.JSONValue;
 public class GeniusSong extends GeniusSongResult {
 	
 	@JSONValue("apple_music_id")
-	private long appleMusicID;
+	private String appleMusicID;
 	
 	@JSONValue("apple_music_player_url")
 	private String appleMusicPlayerURL;
@@ -70,7 +70,7 @@ public class GeniusSong extends GeniusSongResult {
 		this.description = object.getJSONObject("description").getString("plain");
 	}
 
-	public long getAppleMusicID() {
+	public String getAppleMusicID() {
 		return appleMusicID;
 	}
 
