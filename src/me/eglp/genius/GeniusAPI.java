@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import me.eglp.genius.entity.GeniusSearchHit;
+import me.eglp.genius.entity.GeniusSong;
 import me.eglp.genius.util.GeniusEndpoint;
 import me.mrletsplay.mrcore.http.HttpGet;
 import me.mrletsplay.mrcore.http.HttpRequest;
@@ -31,8 +32,8 @@ public class GeniusAPI {
 				.collect(Collectors.toList());
 	}
 	
-	public JSONObject getSong(long id) {
-		return makeGetRequest(GeniusEndpoint.SONGS.subPath(String.valueOf(id)));
+	public GeniusSong getSong(long id) {
+		return JSONConverter.decodeObject(makeGetRequest(GeniusEndpoint.SONGS.subPath(String.valueOf(id))), GeniusSong.class);
 	}
 	
 	public synchronized JSONObject makeGetRequest(GeniusEndpoint endpoint, String... queryParams) {

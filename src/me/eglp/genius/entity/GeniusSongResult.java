@@ -66,7 +66,7 @@ public class GeniusSongResult implements JSONConvertible {
 	private GeniusSongArtistInfo primaryArtist;
 	
 	@JSONConstructor
-	private GeniusSongResult() {}
+	protected GeniusSongResult() {}
 
 	public Long getAnnotationCount() {
 		return annotationCount;
