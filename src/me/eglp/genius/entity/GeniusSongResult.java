@@ -3,12 +3,12 @@ package me.eglp.genius.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 
 import me.eglp.genius.entity.lyrics.GeniusLyricsSection;
 import me.eglp.genius.entity.lyrics.GeniusSongLyrics;
@@ -129,27 +129,24 @@ public class GeniusSongResult implements JSONConvertible {
 	}
 	
 	public GeniusSongLyrics retrieveLyrics() {
-		HttpResult r = HttpRequest.createGet(url)
-				.setHeaderParameter("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
+		HttpResult r = HttpRequest.createGet("https://genius.com/songs/" + id + "/embed.js")
+				.setHeaderParameter("User-Agent", "curl/7.68.0")
 				.execute();
 		
-		Document d = Jsoup.parse(r.asString());
-		Element lyricsElement;
-		Elements lEls = d.getElementsByClass("lyrics");
+		String res = r.asString();
+		int s = res.indexOf("document.write(JSON.parse('") + "document.write(JSON.parse('".length();
+		String str = res.substring(s, res.indexOf("'))", s));
+		String unescaped = StringEscapeUtils.unescapeEcmaScript(StringEscapeUtils.unescapeEcmaScript(str));
 		
-		if(lEls.isEmpty()) { // Because that happens sometimes for some reason
-			lyricsElement = d.getElementsByTag("div").stream()
-					.filter(div -> div.classNames().stream().anyMatch(c -> c.startsWith("Lyrics__Container")))
-					.findFirst().orElse(null);
-		}else {
-			lyricsElement = d.getElementsByClass("lyrics").get(0).child(0);
-		}
+		Document d = Jsoup.parse(unescaped.substring(1, unescaped.length() - 1));
+		
+		Element el = d.getElementsByClass("rg_embed_body").get(0);
 		
 		List<GeniusLyricsSection> sc = new ArrayList<>();
 		String title = null;
 		StringBuilder lyrics = new StringBuilder();
 		
-		append(lyrics, lyricsElement);
+		el.children().forEach(ch -> append(lyrics, ch));
 		
 		StringBuilder sec = new StringBuilder();
 		for(String line : lyrics.toString().split("\n", -1)) {
